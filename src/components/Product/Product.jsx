@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 
 const Product = props => {
     const { key, name, img, seller, price, stock, features } = props.product;
-    // console.log(props.product);
     const handleClick = () => props.handleAddProduct(props.product);
     return (
         <div className='product'>
@@ -19,7 +18,7 @@ const Product = props => {
                 <p>${price}</p>
                 <p>only {stock} left in stock-order soon</p>
                 {
-                    features.length > 0 ? <ul>{features.map((feature, index) => (<li key={index} >{feature.description}-{feature.value}</li>))}</ul> : <p>Features Not Available</p>
+                    features  ? <ul>{features.map((feature, index) => (<li key={index} >{feature.description}-{feature.value}</li>))}</ul> : <p>Features Not Available</p>
                 }
                 {
                     props.showAddToCart && <button className='add-to-cart-btn' onClick={handleClick}> <FontAwesomeIcon icon={faShoppingCart} /> Add To Cart</button>

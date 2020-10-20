@@ -21,13 +21,24 @@ const Review = () => {
     useEffect(() => {
         const savedCart = getDatabaseCart();
         const productKeys = Object.keys(savedCart);
-        const cartProducts = productKeys.map(key => {
-            const product = fakeData.find(product => product.key === key);
-            product.quantity = savedCart[key];
-            return product;
-        });
-        setCart(cartProducts);
+        fetch('https://salty-crag-04652.herokuapp.com/productsByKeys', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productKeys)
+        })
+            .then(res => res.json())
+            .then(data => {
+                setCart(data);
+            });
+        console.log(cart);
+        // const cartProducts = productKeys.map(key => {
+        //     const product = fakeData.find(product => product.key === key);
+        //     product.quantity = savedCart[key];
+        //     return product;
+        // });
+        // setCart(cartProducts);
     }, []);
+    // console.log(cart);
 
     let thankYou;
     if (orderPlaced) {

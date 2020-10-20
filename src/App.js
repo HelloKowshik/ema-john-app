@@ -16,7 +16,7 @@ export const UserContext = React.createContext();
 
 function App() {
   const [loggedUser, setLoggedUser] = useState({});
-  console.log(loggedUser);
+  // console.log(loggedUser);
   return (
     <UserContext.Provider value={[loggedUser, setLoggedUser]}>
       <h3>EMAIL:{loggedUser.email}</h3>

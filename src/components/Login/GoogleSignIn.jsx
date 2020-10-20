@@ -17,13 +17,21 @@ const GoogleSignIn = () => {
   const { from } = location.state || { from: { pathname: "/" } };
 
     const provider = new firebase.auth.GoogleAuthProvider();
-    const [user, setUser] = useState({});
+  const [user, setUser] = useState({});
+  const setUserToken = () => {
+    firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+      sessionStorage.setItem('token', idToken);
+    }).catch(function(error) {
+      // Handle error
+    });
+  }
     const handleClick = () => {
       firebase.auth().signInWithPopup(provider)
         .then(res => {
           // console.log(res);
           setUser(res);
           setLoggedUser(res.user);
+          setUserToken();
           history.replace(from);
         })
         .catch(err => {

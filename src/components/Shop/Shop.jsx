@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Shop.css';
-import fakeData from '../../fakeData';
+// import fakeData from '../../fakeData';
 import Product from '../Product/Product';
 import Cart from '../Cart/Cart';
 import { addToDatabaseCart, getDatabaseCart } from '../../utilities/databaseManager';
@@ -8,19 +8,36 @@ import { Link } from 'react-router-dom';
 
 
 const Shop = () => {
-    const firstFifteen = fakeData.slice(0, 15);
-    const [products, setProducts] = useState(firstFifteen);
+    // const firstFifteen = fakeData.slice(0, 15);
+    const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
-
     useEffect(() => { 
+        fetch('https://salty-crag-04652.herokuapp.com/products')
+            .then(res => res.json())
+            .then(data => setProducts(data));
+    }, []);
+
+    useEffect(() => {
         const savedCart = getDatabaseCart();
         const productKeys = Object.keys(savedCart);
-        const previousCart = productKeys.map(existingKey => {
-            const product = fakeData.find(pd => pd.key === existingKey);
-            product.quantity = savedCart[existingKey];
-            return product;
+        fetch('https://salty-crag-04652.herokuapp.com/productsByKeys', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productKeys)
         })
-        setCart(previousCart);
+            .then(res => res.json())
+            .then(data => {
+                setCart(data);
+            });
+        // if (products.length) {
+        //     const previousCart = productKeys.map(existingKey => {
+        //         // const product = fakeData.find(pd => pd.key === existingKey);
+        //         const product = products.find(pd => pd.key === existingKey);
+        //         product.quantity = savedCart[existingKey];
+        //         return product;
+        //     })
+        //     setCart(previousCart);
+        // }
     }, []);
 
     const handleAddProduct = product => {
@@ -44,6 +61,9 @@ const Shop = () => {
     return (
         <div className='shop-container'>
             <div className="product-container">
+                {
+                    products.length === 0 && <p>Loading...</p>
+                }
                 {
                     products.map(product => (<Product key={product.key} product={product} handleAddProduct={handleAddProduct} showAddToCart={true} />))
                 }

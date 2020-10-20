@@ -74,10 +74,13 @@ const SigninForm = () => {
                     const currentUser = { ...user };
                     currentUser.error = '';
                     currentUser.success = true;
-                    setUser(currentUser); 
-                    setLoggedUser(currentUser);
+                    const signInUser = { displayName: res.user.displayName, email: currentUser.email };
+                    // setUser(currentUser); 
+                    // setLoggedUser(currentUser);
+                    setUser(signInUser); 
+                    setLoggedUser(signInUser);
                     history.replace(from);
-                    console.log('user: ',res.user);
+                    // console.log('user: ', res.user, newUser, user);
                 })
                 .catch(function (error) {
                 const errorMessage = error.message;

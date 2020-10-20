@@ -2,6 +2,7 @@ import React from 'react';
 
 const ReviewItem = props => {
     const { key, name, quantity, price } = props.item;
+    // console.log(props.item);
     const handleRemove = () => {
         props.removeProduct(key);
     };
