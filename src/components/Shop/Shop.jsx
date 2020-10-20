@@ -11,11 +11,12 @@ const Shop = () => {
     // const firstFifteen = fakeData.slice(0, 15);
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
+    const [search, setSearch] = useState([]);
     useEffect(() => { 
-        fetch('https://salty-crag-04652.herokuapp.com/products')
+        fetch(`http://127.0.0.1:4141/products?search=${search}`)
             .then(res => res.json())
             .then(data => setProducts(data));
-    }, []);
+    }, [search]);
 
     useEffect(() => {
         const savedCart = getDatabaseCart();
@@ -57,10 +58,15 @@ const Shop = () => {
         setCart(newCart);
         addToDatabaseCart(product.key, count);
     }
+
+    const handleSearch = e => {
+        setSearch(e.target.value);
+    }
     
     return (
         <div className='shop-container'>
             <div className="product-container">
+                <input type="text" placeholder='Search Product By Name' onBlur={handleSearch} style={{height:'20px',width:'100%'}}/>
                 {
                     products.length === 0 && <p>Loading...</p>
                 }
